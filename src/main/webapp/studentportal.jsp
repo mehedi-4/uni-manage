@@ -101,6 +101,24 @@
         }
         button:hover { background-color: #2b6cb0; transform: scale(1.02); }
 
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            border: none;
+        }
+
+        .nav-blue { background-color: var(--primary-blue); color: white; }
+        .nav-blue:hover { background-color: #2b6cb0; transform: scale(1.02); }
+
+        .nav-green { background-color: var(--primary-green); color: white; }
+        .nav-green:hover { background-color: #2f9e57; transform: scale(1.02); }
+
         .message { color: var(--primary-green); margin-bottom: 1rem; }
         .error { color: var(--accent-red); margin-bottom: 1rem; }
 
@@ -123,6 +141,9 @@
 
         .back-link { display: block; margin-top: 2rem; color: #a0aec0; text-decoration: none; }
         .back-link:hover { color: var(--text-color); }
+
+        /* small helper */
+        .hidden { display: none; }
 
         @media (max-width: 768px) { .container { padding: 2rem; } }
     </style>
@@ -214,8 +235,14 @@
         <% if (message != null) { %><p class="message"><%= message %></p><% } %>
         <% if (error != null) { %><p class="error"><%= error %></p><% } %>
 
-        <!-- Course Registration -->
-        <div class="section">
+        <!-- Two big buttons like admin portal -->
+        <div style="max-width:460px; margin: 0 auto 1.5rem;">
+            <button class="nav-button nav-blue" onclick="showSection('registerSection')">Register Courses</button>
+            <button class="nav-button nav-green" onclick="showSection('myCoursesSection')">View Registered Courses</button>
+        </div>
+
+        <!-- Course Registration (hidden by default) -->
+        <div id="registerSection" class="section hidden">
             <h3>Register Courses</h3>
             <form method="post">
                 <label for="semester" style="display:block; margin-bottom:0.5rem; text-align:left; font-weight:600;">Select Semester:</label>
@@ -237,8 +264,8 @@
             </form>
         </div>
 
-        <!-- View Registered Courses -->
-        <div class="section">
+        <!-- View Registered Courses (hidden by default) -->
+        <div id="myCoursesSection" class="section hidden">
             <h3>My Registered Courses</h3>
             <% if (registered.isEmpty()) { %>
                 <p>You haven't registered any courses yet.</p>
@@ -262,20 +289,41 @@
             <% } %>
         </div>
 
-        <a href="index.jsp" class="back-link">Back to Home</a>
+        <a href="logout.jsp" class="back-link">Logout</a>
     </div>
 
     <script>
-        const semesterDropdown = document.getElementById("semester");
-        semesterDropdown.addEventListener("change", function() {
-            const selected = this.value;
-            const courseDivs = document.querySelectorAll("[data-semester]");
-            courseDivs.forEach(div => {
-                if (div.getAttribute("data-semester") === selected || selected === "") {
-                    div.style.display = "flex"; div.style.alignItems = "center";
-                } else { div.style.display = "none"; }
+        // Show the requested section and hide the other
+        function showSection(id) {
+            var reg = document.getElementById('registerSection');
+            var my = document.getElementById('myCoursesSection');
+
+            if (reg) reg.style.display = 'none';
+            if (my) my.style.display = 'none';
+
+            var target = document.getElementById(id);
+            if (target) {
+                target.style.display = 'block';
+                target.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+        }
+
+        // Initialize: nothing visible by default. (If you want register open by default, uncomment next line)
+        // showSection('registerSection');
+
+        // Semester dropdown listener (safe-guard if element not present)
+        var semesterDropdown = document.getElementById("semester");
+        if (semesterDropdown) {
+            semesterDropdown.addEventListener("change", function() {
+                const selected = this.value;
+                const courseDivs = document.querySelectorAll("[data-semester]");
+                courseDivs.forEach(div => {
+                    if (div.getAttribute("data-semester") === selected || selected === "") {
+                        div.style.display = "flex"; div.style.alignItems = "center";
+                    } else { div.style.display = "none"; }
+                });
             });
-        });
+        }
     </script>
 <%
         } catch (Exception e) {

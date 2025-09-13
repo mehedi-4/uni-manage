@@ -157,7 +157,7 @@
             <a href="assignTeacher.jsp" class="btn-purple">Assign Teacher</a>
         </div>
 
-        <a href="index.jsp" class="back-home">Back to Home</a>
+        <a href="logout.jsp" class="back-home">Log Out</a>
     </div>
 <%
     }

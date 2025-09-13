@@ -94,16 +94,34 @@
             color: var(--accent-red);
             margin-top: 1rem;
         }
+        .back-btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    margin-top: 0.5rem;
+    color: #fff;
+    text-align: center;
+    border-radius: 9999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    transform: scale(1.02);
+}
+        
     </style>
 </head>
 <body>
     <div class="login-container">
         <h2>Student Login</h2>
         <form action="student" method="post">
-            <input type="text" name="reg" placeholder="Student Registration" required>
-            <input type="password" name="pass" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
+    <input type="text" name="reg" placeholder="Student Registration" required>
+    <input type="password" name="pass" placeholder="Password" required>
+    <button type="submit">Login</button>
+    <a href="index.jsp" class="back-btn">Back to Home</a>
+</form>
         <% if (request.getAttribute("error") != null) { %>
             <p class="error"><%= request.getAttribute("error") %></p>
         <% } %>

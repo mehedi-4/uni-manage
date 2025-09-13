@@ -54,7 +54,7 @@ CREATE TABLE `course_assignments` (
   KEY `teacher_reg` (`teacher_reg`),
   CONSTRAINT `course_assignments_ibfk_1` FOREIGN KEY (`course_code`) REFERENCES `courses` (`code`),
   CONSTRAINT `course_assignments_ibfk_2` FOREIGN KEY (`teacher_reg`) REFERENCES `teachers` (`reg`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE `course_assignments` (
 
 LOCK TABLES `course_assignments` WRITE;
 /*!40000 ALTER TABLE `course_assignments` DISABLE KEYS */;
-INSERT INTO `course_assignments` VALUES (6,'CSE101','T001'),(7,'CSE102','T003'),(8,'CSE202','T001'),(9,'CSE450','T004'),(10,'CSE303','T002'),(11,'CSE203','T002'),(12,'CSE302','T005'),(13,'CSE451','T005'),(14,'CSE103','T005');
+INSERT INTO `course_assignments` VALUES (6,'CSE101','T001'),(7,'CSE102','T003'),(8,'CSE202','T001'),(9,'CSE450','T004'),(10,'CSE303','T002'),(11,'CSE203','T002'),(12,'CSE302','T005'),(13,'CSE451','T005'),(14,'CSE103','T005'),(15,'CSE201','T005'),(16,'CSE453','T001'),(17,'CSE520','T003');
 /*!40000 ALTER TABLE `course_assignments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ CREATE TABLE `course_registration` (
   KEY `course_code` (`course_code`),
   CONSTRAINT `course_registration_ibfk_1` FOREIGN KEY (`student_reg`) REFERENCES `students` (`reg`),
   CONSTRAINT `course_registration_ibfk_2` FOREIGN KEY (`course_code`) REFERENCES `courses` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `course_registration` (
 
 LOCK TABLES `course_registration` WRITE;
 /*!40000 ALTER TABLE `course_registration` DISABLE KEYS */;
-INSERT INTO `course_registration` VALUES (1,'2022331004','CSE201','2'),(2,'2022331004','CSE202','2'),(3,'2022331004','CSE450','4'),(4,'2022331004','CSE101','1'),(5,'2022331004','CSE102','1'),(6,'2022331004','CSE103','1'),(9,'2022331004','CSE203','2'),(11,'2022331004','CSE301','3'),(12,'2022331004','CSE302','3'),(13,'2022331004','CSE303','3'),(14,'2022331025','CSE201','2'),(15,'2022331025','CSE202','2'),(17,'2022331025','CSE302','3'),(20,'2022331025','CSE452','5'),(21,'2022331025','CSE301','3'),(26,'2022331025','CSE303','3'),(28,'2022331004','CSE451','5');
+INSERT INTO `course_registration` VALUES (1,'2022331004','CSE201','2'),(2,'2022331004','CSE202','2'),(3,'2022331004','CSE450','4'),(4,'2022331004','CSE101','1'),(5,'2022331004','CSE102','1'),(6,'2022331004','CSE103','1'),(9,'2022331004','CSE203','2'),(11,'2022331004','CSE301','3'),(12,'2022331004','CSE302','3'),(13,'2022331004','CSE303','3'),(14,'2022331025','CSE201','2'),(15,'2022331025','CSE202','2'),(17,'2022331025','CSE302','3'),(20,'2022331025','CSE452','5'),(21,'2022331025','CSE301','3'),(26,'2022331025','CSE303','3'),(28,'2022331004','CSE451','5'),(30,'2022331025','CSE450','2'),(31,'2022331022','CSE201','2'),(32,'2022331022','CSE202','2'),(33,'2022331022','CSE302','3'),(34,'2022331022','CSE303','3'),(35,'2022331022','CSE453','2'),(36,'2022331004','CSE453','2'),(37,'2022331025','CSE453','2'),(38,'2022331022','CSE301','4'),(40,'2022331022','CSE450','4'),(41,'2022331003','CSE101','1'),(42,'2022331003','CSE102','1'),(43,'2022331003','CSE301','3'),(44,'2022331003','CSE302','3'),(45,'2022331003','CSE450','4'),(46,'2022331004','CSE520','6'),(47,'2022331022','CSE520','6');
 /*!40000 ALTER TABLE `course_registration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +119,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES ('CSE101','Introduction to Programming',3,1),('CSE102','Computer Fundamentals',3,1),('CSE103','Discrete Mathematics',3,1),('CSE201','Data Structures',3.5,2),('CSE202','Digital Logic Design',3,2),('CSE203','Object-Oriented Programming',3.5,2),('CSE301','Database Systems',3,3),('CSE302','Computer Architecture',3,3),('CSE303','Algorithms',3.5,3),('CSE450','Project II',3,4),('CSE451','adklfjal',3.5,5),('CSE452','alkdfal;kfjl',3.5,5);
+INSERT INTO `courses` VALUES ('CSE101','Introduction to Programming',3,1),('CSE102','Computer Fundamentals',3,1),('CSE103','Discrete Mathematics',3,1),('CSE201','Data Structures',3.5,2),('CSE202','Digital Logic Design',3,2),('CSE203','Object-Oriented Programming',3.5,2),('CSE301','Database Systems',3,3),('CSE302','Computer Architecture',3,3),('CSE303','Algorithms',3.5,3),('CSE450','Project II',3,4),('CSE451','adklfjal',3.5,5),('CSE452','alkdfal;kfjl',3.5,5),('CSE453','lksdafjkl asdlkjf',3,2),('CSE520','Computer Graphics',3,6);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-28 16:06:02
+-- Dump completed on 2025-09-13 21:44:39
