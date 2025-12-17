@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -128,61 +127,22 @@
     </style>
 </head>
 <body>
-<%
-    if (session.getAttribute("reg") == null) {
-%>
-    <div class="container">
-        <h2 class="text-red">Access Denied</h2>
-        <a href="admin.jsp" class="back-link">Go to Login</a>
-    </div>
-<%
-    } else {
-        String message = null, error = null;
-
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            String code = request.getParameter("code");
-            String title = request.getParameter("title");
-            String credit = request.getParameter("credit");
-            String semester = request.getParameter("semester");
-
-            if (code != null && title != null && credit != null && semester != null &&
-                !code.isEmpty() && !title.isEmpty() && !credit.isEmpty() && !semester.isEmpty()) {
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/student_info?useSSL=false", "root", "iammhe");
-
-                    PreparedStatement stmt = conn.prepareStatement("INSERT INTO courses (code, title, credit, semester) VALUES (?, ?, ?, ?)");
-                    stmt.setString(1, code);
-                    stmt.setString(2, title);
-                    stmt.setFloat(3, Float.parseFloat(credit));
-                    stmt.setString(4, semester);
-                    stmt.executeUpdate();
-
-                    message = "Course added successfully!";
-                    stmt.close(); conn.close();
-                } catch (Exception e) {
-                    error = "Error: " + e.getMessage();
-                }
-            } else {
-                error = "All fields are required!";
-            }
-        }
-%>
     <div class="container">
         <h2>Add Course</h2>
-        <% if (message != null) { %><p class="message"><%= message %></p><% } %>
-        <% if (error != null) { %><p class="error"><%= error %></p><% } %>
-        <form method="post">
+        <% if (request.getAttribute("message") != null) { %>
+            <p class="message"><%= request.getAttribute("message") %></p>
+        <% } %>
+        <% if (request.getAttribute("error") != null) { %>
+            <p class="error"><%= request.getAttribute("error") %></p>
+        <% } %>
+        <form action="addCourse" method="post">
             <input type="text" name="code" placeholder="Course Code" required><br>
             <input type="text" name="title" placeholder="Course Title" required><br>
             <input type="number" step="0.1" name="credit" placeholder="Credit" required><br>
             <input type="text" name="semester" placeholder="Semester" required><br>
             <button type="submit">Add Course</button>
         </form>
-        <a href="adminportal.jsp" class="back-link">Back to Portal</a>
+        <a href="adminPortal" class="back-link">Back to Portal</a>
     </div>
-<%
-    }
-%>
 </body>
 </html>

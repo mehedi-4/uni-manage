@@ -44,7 +44,7 @@ public class AdminLoginServlet extends HttpServlet {
                         // Store username in session
                         HttpSession session = req.getSession();
                         session.setAttribute("reg", rs.getString("reg")); // Assuming 'username' is a column in admins table
-                        resp.sendRedirect("adminportal.jsp"); // Redirect to welcome page
+                        resp.sendRedirect("adminPortal"); // Redirect to welcome page
                     } else {
                         System.out.println("Login failed: Invalid credentials");
                         // Failed login

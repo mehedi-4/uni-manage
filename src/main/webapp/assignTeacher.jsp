@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,116 +126,50 @@
     </style>
 </head>
 <body>
-<%
-    if (session.getAttribute("reg") == null) {
-%>
-    <div class="container">
-        <h2 class="text-red">Access Denied</h2>
-        <a href="admin.jsp" class="back-link">Go to Login</a>
-    </div>
-<%
-    } else {
-        String message = null, error = null;
-
-        // DB connection details
-        String url = "jdbc:mysql://localhost:3306/student_info?useSSL=false";
-        String dbUser = "root";
-        String dbPassword = "iammhe";
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
-
-            if ("POST".equalsIgnoreCase(request.getMethod())) {
-                String courseCode = request.getParameter("courseCode"); // code as value
-                String teacherReg = request.getParameter("teacherReg"); // reg as value
-
-                if (courseCode != null && teacherReg != null) {
-                    try {
-                        // Check if course is already assigned
-                        String checkSql = "SELECT COUNT(*) FROM course_assignments WHERE course_code = ?";
-                        PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-                        checkStmt.setString(1, courseCode);
-                        ResultSet rs = checkStmt.executeQuery();
-                        rs.next();
-                        int count = rs.getInt(1);
-                        rs.close();
-                        checkStmt.close();
-
-                        if (count > 0) {
-                            error = "This course is already assigned to a teacher!";
-                        } else {
-                            String sql = "INSERT INTO course_assignments (course_code, teacher_reg) VALUES (?, ?)";
-                            PreparedStatement stmt = conn.prepareStatement(sql);
-                            stmt.setString(1, courseCode);
-                            stmt.setString(2, teacherReg);
-                            stmt.executeUpdate();
-                            stmt.close();
-
-                            message = "Teacher assigned successfully!";
-                        }
-                    } catch (Exception e) {
-                        error = "Error: " + e.getMessage();
-                    }
-                } else {
-                    error = "Please select both fields!";
-                }
-            }
-
-            // Fetch courses (code + title)
-            Statement stmtCourses = conn.createStatement();
-            ResultSet rsCourses = stmtCourses.executeQuery("SELECT code, title FROM courses");
-            java.util.List<String[]> courses = new java.util.ArrayList<>();
-            while (rsCourses.next()) {
-                courses.add(new String[]{rsCourses.getString("code"), rsCourses.getString("title")});
-            }
-            rsCourses.close();
-            stmtCourses.close();
-
-            // Fetch teachers (reg + name)
-            Statement stmtTeachers = conn.createStatement();
-            ResultSet rsTeachers = stmtTeachers.executeQuery("SELECT reg, name FROM teachers");
-            java.util.List<String[]> teachers = new java.util.ArrayList<>();
-            while (rsTeachers.next()) {
-                teachers.add(new String[]{rsTeachers.getString("reg"), rsTeachers.getString("name")});
-            }
-            rsTeachers.close();
-            stmtTeachers.close();
-
-            conn.close();
-%>
     <div class="container">
         <h2>Assign Teacher to Course</h2>
-        <% if (message != null) { %><p class="message"><%= message %></p><% } %>
-        <% if (error != null) { %><p class="error"><%= error %></p><% } %>
+        <% if (request.getAttribute("message") != null) { %>
+            <p class="message"><%= request.getAttribute("message") %></p>
+        <% } %>
+        <% if (request.getAttribute("error") != null) { %>
+            <p class="error"><%= request.getAttribute("error") %></p>
+        <% } %>
 
-        <form method="post">
+        <form action="assignTeacher" method="post">
             <!-- Course dropdown -->
             <select name="courseCode" required>
                 <option value="">-- Select Course --</option>
-                <% for (String[] c : courses) { %>
+                <% 
+                List<String[]> courses = (List<String[]>) request.getAttribute("courses");
+                if (courses != null) {
+                    for (String[] c : courses) { 
+                %>
                     <option value="<%= c[0] %>"><%= c[1] %> (<%= c[0] %>)</option>
-                <% } %>
+                <% 
+                    } 
+                }
+                %>
             </select><br>
 
             <!-- Teacher dropdown -->
             <select name="teacherReg" required>
                 <option value="">-- Select Teacher --</option>
-                <% for (String[] t : teachers) { %>
+                <% 
+                List<String[]> teachers = (List<String[]>) request.getAttribute("teachers");
+                if (teachers != null) {
+                    for (String[] t : teachers) { 
+                %>
                     <option value="<%= t[0] %>"><%= t[1] %> (<%= t[0] %>)</option>
-                <% } %>
+                <% 
+                    } 
+                }
+                %>
             </select><br>
 
             <button type="submit">Assign</button>
         </form>
 
-        <a href="adminportal.jsp" class="back-link">Back to Portal</a>
+        <a href="adminPortal" class="back-link">Back to Portal</a>
     </div>
-<%
-        } catch (Exception e) {
-            out.println("<p class='error'>DB Error: " + e.getMessage() + "</p>");
-        }
-    }
-%>
 </body>
 </html>

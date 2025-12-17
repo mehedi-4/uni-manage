@@ -35,11 +35,71 @@
     <servlet-mapping>
         <servlet-name>AdminLoginServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
-    </servlet-mapping>    
+    </servlet-mapping>   
     
-    
-    
-    
+    <servlet>
+        <servlet-name>AddCourseServlet</servlet-name>
+        <servlet-class>AddCourseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddCourseServlet</servlet-name>
+        <url-pattern>/addCourse</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AssignTeacherServlet</servlet-name>
+        <servlet-class>AssignTeacherServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AssignTeacherServlet</servlet-name>
+        <url-pattern>/assignTeacher</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ViewStudentsServlet</servlet-name>
+        <servlet-class>ViewStudentsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewStudentsServlet</servlet-name>
+        <url-pattern>/viewStudents</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StudentPortalServlet</servlet-name>
+        <servlet-class>StudentPortalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentPortalServlet</servlet-name>
+        <url-pattern>/studentPortal</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TeacherPortalServlet</servlet-name>
+        <servlet-class>TeacherPortalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TeacherPortalServlet</servlet-name>
+        <url-pattern>/teacherPortal</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminPortalServlet</servlet-name>
+        <servlet-class>AdminPortalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPortalServlet</servlet-name>
+        <url-pattern>/adminPortal</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>

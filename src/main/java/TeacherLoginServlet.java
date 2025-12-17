@@ -44,7 +44,7 @@ public class TeacherLoginServlet extends HttpServlet {
                         // Successful login
                     	HttpSession session = req.getSession();
                         session.setAttribute("reg", rs.getString("reg"));
-                        resp.sendRedirect("teacherportal.jsp");
+                        resp.sendRedirect("teacherPortal");
                     } else {
                         System.out.println("Login failed: Invalid credentials");
                         // Failed login

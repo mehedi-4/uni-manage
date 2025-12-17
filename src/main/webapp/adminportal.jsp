@@ -153,11 +153,11 @@
         <p>You have successfully logged in to the Admin Portal.</p>
 
         <div class="menu-links">
-            <a href="addcourse.jsp" class="btn-green">Add Course</a>
-            <a href="assignTeacher.jsp" class="btn-purple">Assign Teacher</a>
+            <a href="addCourse" class="btn-green">Add Course</a>
+            <a href="assignTeacher" class="btn-purple">Assign Teacher</a>
         </div>
 
-        <a href="logout.jsp" class="back-home">Log Out</a>
+        <a href="logout" class="back-home">Log Out</a>
     </div>
 <%
     }

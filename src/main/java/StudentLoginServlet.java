@@ -44,7 +44,7 @@ public class StudentLoginServlet extends HttpServlet {
                         HttpSession session = req.getSession();
                         session.setAttribute("reg", rs.getString("reg"));
                         // Successful login
-                        resp.sendRedirect("studentportal.jsp"); // Redirect to a welcome page
+                        resp.sendRedirect("studentPortal"); // Redirect to a welcome page
                     } else {
                         System.out.println("Login failed: Invalid credentials");
                         // Failed login

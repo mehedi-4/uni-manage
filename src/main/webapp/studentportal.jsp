@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,91 +149,14 @@
     </style>
 </head>
 <body>
-<%
-    if (session.getAttribute("reg") == null) {
-%>
     <div class="container">
-        <h2 class="text-red">Access Denied</h2>
-        <a href="student.jsp" class="back-link">Go to Login</a>
-    </div>
-<%
-    } else {
-        String studentReg = (String) session.getAttribute("reg");
-        String studentName = "";
-        String message = null, error = null;
-
-        String url = "jdbc:mysql://localhost:3306/student_info?useSSL=false";
-        String dbUser = "root";
-        String dbPassword = "iammhe";
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
-
-            // Fetch student name
-            PreparedStatement psName = conn.prepareStatement("SELECT name FROM students WHERE reg = ?");
-            psName.setString(1, studentReg);
-            ResultSet rsName = psName.executeQuery();
-            if (rsName.next()) { studentName = rsName.getString("name"); }
-            rsName.close();
-            psName.close();
-
-            // Handle course registration
-            if ("POST".equalsIgnoreCase(request.getMethod()) && request.getParameter("registerCourses") != null) {
-                String semester = request.getParameter("semester");
-                String[] selectedCourses = request.getParameterValues("courses");
-                if (semester != null && selectedCourses != null) {
-                    for (String courseCode : selectedCourses) {
-                        try {
-                            String sql = "INSERT INTO course_registration (student_reg, course_code, semester) VALUES (?, ?, ?)";
-                            PreparedStatement stmt = conn.prepareStatement(sql);
-                            stmt.setString(1, studentReg);
-                            stmt.setString(2, courseCode);
-                            stmt.setString(3, semester);
-                            stmt.executeUpdate();
-                            stmt.close();
-                        } catch (SQLIntegrityConstraintViolationException e) {
-                            error = "You already registered for some of these courses.";
-                        }
-                    }
-                    if (error == null) { message = "Courses registered successfully!"; }
-                } else { error = "Please select a semester and at least one course."; }
-            }
-
-            // Fetch all semesters
-            Statement stmtSem = conn.createStatement();
-            ResultSet rsSem = stmtSem.executeQuery("SELECT DISTINCT semester FROM courses ORDER BY semester");
-            java.util.List<String> semesters = new java.util.ArrayList<>();
-            while (rsSem.next()) { semesters.add(rsSem.getString("semester")); }
-            rsSem.close();
-            stmtSem.close();
-
-            // Fetch courses
-            Statement stmtCourses = conn.createStatement();
-            ResultSet rsCourses = stmtCourses.executeQuery("SELECT code, title, semester FROM courses ORDER BY semester, code");
-            java.util.List<String[]> courses = new java.util.ArrayList<>();
-            while (rsCourses.next()) {
-                courses.add(new String[]{rsCourses.getString("code"), rsCourses.getString("title"), rsCourses.getString("semester")});
-            }
-            rsCourses.close();
-            stmtCourses.close();
-
-            // Fetch registered courses for student
-            String sql = "SELECT c.code, c.title, c.semester FROM course_registration r JOIN courses c ON r.course_code = c.code WHERE r.student_reg = ?";
-            PreparedStatement stmtReg = conn.prepareStatement(sql);
-            stmtReg.setString(1, studentReg);
-            ResultSet rsReg = stmtReg.executeQuery();
-            java.util.List<String[]> registered = new java.util.ArrayList<>();
-            while (rsReg.next()) { registered.add(new String[]{rsReg.getString("code"), rsReg.getString("title"), rsReg.getString("semester")}); }
-            rsReg.close();
-            stmtReg.close();
-
-            conn.close();
-%>
-    <div class="container">
-        <h2>Welcome, <%= studentName %>!</h2>
-        <% if (message != null) { %><p class="message"><%= message %></p><% } %>
-        <% if (error != null) { %><p class="error"><%= error %></p><% } %>
+        <h2>Welcome, <%= request.getAttribute("studentName") %>!</h2>
+        <% if (request.getAttribute("message") != null) { %>
+            <p class="message"><%= request.getAttribute("message") %></p>
+        <% } %>
+        <% if (request.getAttribute("error") != null) { %>
+            <p class="error"><%= request.getAttribute("error") %></p>
+        <% } %>
 
         <!-- Two big buttons like admin portal -->
         <div style="max-width:460px; margin: 0 auto 1.5rem;">
@@ -244,21 +167,35 @@
         <!-- Course Registration (hidden by default) -->
         <div id="registerSection" class="section hidden">
             <h3>Register Courses</h3>
-            <form method="post">
+            <form action="studentPortal" method="post">
                 <label for="semester" style="display:block; margin-bottom:0.5rem; text-align:left; font-weight:600;">Select Semester:</label>
                 <select name="semester" id="semester" required>
                     <option value="">-- Select Semester --</option>
-                    <% for (String sem : semesters) { %>
+                    <% 
+                    List<String> semesters = (List<String>) request.getAttribute("semesters");
+                    if (semesters != null) {
+                        for (String sem : semesters) { 
+                    %>
                         <option value="<%= sem %>"><%= sem %></option>
-                    <% } %>
+                    <% 
+                        } 
+                    }
+                    %>
                 </select>
                 <div style="text-align:left; margin-top:1rem; margin-bottom:1rem; max-height:200px; overflow-y:auto; padding-right:10px;">
-                    <% for (String[] c : courses) { %>
+                    <% 
+                    List<String[]> courses = (List<String[]>) request.getAttribute("courses");
+                    if (courses != null) {
+                        for (String[] c : courses) { 
+                    %>
                         <div data-semester="<%= c[2] %>" style="display:none; margin-bottom:0.5rem;">
-                            <input type="checkbox" name="courses" value="<%= c[0] %>">
+                            <input type="checkbox" name="courses" value="<%= c[0] %>">1
                             <label><%= c[1] %> (<%= c[0] %>)</label>
                         </div>
-                    <% } %>
+                    <% 
+                        } 
+                    }
+                    %>
                 </div>
                 <button type="submit" name="registerCourses">Register</button>
             </form>
@@ -267,13 +204,20 @@
         <!-- View Registered Courses (hidden by default) -->
         <div id="myCoursesSection" class="section hidden">
             <h3>My Registered Courses</h3>
-            <% if (registered.isEmpty()) { %>
+            <% 
+            List<String[]> registered = (List<String[]>) request.getAttribute("registered");
+            if (registered == null || registered.isEmpty()) { 
+            %>
                 <p>You haven't registered any courses yet.</p>
             <% } else { %>
                 <div style="max-height:300px; overflow-y:auto;">
                     <table>
                         <thead>
-                            <tr><th>Course Code</th><th>Title</th><th>Semester</th></tr>
+                            <tr>
+                            	<th>Course Code</th>
+                            	<th>Title</th>
+                            	<th>Semester</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <% for (String[] r : registered) { %>
@@ -289,7 +233,7 @@
             <% } %>
         </div>
 
-        <a href="logout.jsp" class="back-link">Logout</a>
+        <a href="logout" class="back-link">Logout</a>
     </div>
 
     <script>
@@ -325,11 +269,5 @@
             });
         }
     </script>
-<%
-        } catch (Exception e) {
-            out.println("<p class='error'>DB Error: " + e.getMessage() + "</p>");
-        }
-    }
-%>
 </body>
 </html>
